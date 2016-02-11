@@ -97,15 +97,22 @@ public class MyStringBuilder
 	// return the current MyStringBuilder.  Be careful for special cases!
 	public MyStringBuilder append(MyStringBuilder b)
 	{
+		
 		if (b == null || b.length == 0) // Special case for empty String
 		{					 			  // or null reference
 			return this;
 		}
-		else
-		{
-			this.append(b.toString());
+		/*
+		else{
+			boolean firstPt = false;
+			if(this.firstC == null){
+				this.firstC = (CNode)b;
+				return this;
+			}
+			lastC.next = (CNode)b;
 		}
-		return this;
+		*/
+		return this.append(b.toString());
 	}
 
 
@@ -198,8 +205,7 @@ public class MyStringBuilder
 			currNode = newNode;
 			length++;
 			lastC = currNode;
-		}
-		
+		}	
 		return this;
 	}
 
@@ -233,7 +239,7 @@ public class MyStringBuilder
 	public MyStringBuilder delete(int start, int end)
 	{
 		if(start<0||start>length){
-			throw new IndexOutOfBoundsException();
+			return this;
 		}
 		else if(end<0){
 			throw new IndexOutOfBoundsException();						///////UPDATE LENGTH
@@ -273,7 +279,7 @@ public class MyStringBuilder
 			if(start == 0){
 				firstC = currNode2;
 			}
-			
+			length = getLength();
 			return this;
 		}
 	}
@@ -284,6 +290,39 @@ public class MyStringBuilder
 	// Be careful for special cases!
 	public MyStringBuilder deleteCharAt(int index)
 	{
+		if(index<0||index>length){
+			return this;
+		}
+		else if(index == 0){
+			firstC = firstC.next;
+			return this;
+		}
+		else if(index == length-1){
+			int i = 0;
+			CNode currNode = firstC;
+			while(true){
+				if(currNode.next == lastC){
+					currNode.next = null;
+					lastC = currNode;
+					break;
+				}
+				currNode = currNode.next;
+			}
+			length--;
+		}
+		else{
+			int i = 0;
+			CNode currNode = firstC;
+			while(true){
+				if((index-1)==i){
+					currNode.next = currNode.next.next;
+					break;
+				}
+				currNode = currNode.next;
+				i++;
+			}
+			length--;
+		}
 		return this;
 	}
 
@@ -294,6 +333,7 @@ public class MyStringBuilder
 	// what you need to do for this method before implementing it.
 	public int indexOf(String str)
 	{
+		/*
 		if(index<0||index>length){
 			throw new IndexOutOfBoundsException();
 		}
@@ -322,7 +362,8 @@ public class MyStringBuilder
 				length++;
 			}
 		}
-		return i;
+		*/
+		return -1;
 	}
 
 	// Insert String str into the current MyStringBuilder starting at index
@@ -331,6 +372,67 @@ public class MyStringBuilder
 	// do nothing.
 	public MyStringBuilder insert(int offset, String str)
 	{
+		if(offset<0||offset>length){
+			return this;
+		}
+		
+		else if(offset == length){
+			append(str);
+		}
+		
+		else if(this.firstC == null){
+			this.firstC = new CNode(str.charAt(0));
+			this.lastC = this.firstC;
+			CNode currNode = lastC;
+
+			for (int i = 1; i < str.length(); i++)
+			{
+				CNode newNode = new CNode(str.charAt(i));
+				currNode.next = newNode;
+				currNode = newNode;
+				length++;
+			}
+			lastC = currNode;
+		}
+		
+		else if(offset == 0){
+			CNode tempNode = firstC;
+			this.firstC = new CNode(str.charAt(0));
+			CNode currNode = firstC;
+			
+			for (int j = 1; j < str.length(); j++)
+			{
+				CNode newNode = new CNode(str.charAt(j));
+				currNode.next = newNode;
+				currNode = newNode;
+				length++;
+			}
+			currNode.next = tempNode;
+		}
+		
+		else{
+			CNode tempNode;
+			int i = 0;
+			CNode currNode = firstC;
+			while(true){
+				if((offset-1)==i){
+					tempNode = currNode.next;
+					break;
+				}
+				currNode = currNode.next;
+				i++;
+			}
+			
+			for (int j = 0; j < str.length(); j++)
+			{
+				CNode newNode = new CNode(str.charAt(j));
+				currNode.next = newNode;
+				currNode = newNode;
+				length++;
+			}
+			currNode.next = tempNode;
+		}
+		length = getLength();		//Need to figure out why my count isn't right so i can take this out***************************************
 		return this;
 	}
 
@@ -340,6 +442,41 @@ public class MyStringBuilder
 	// do nothing.
 	public MyStringBuilder insert(int offset, char c)
 	{
+		if(offset<0||offset>length){
+			return this;
+		}
+		
+		else if(offset == length){
+			append(c);
+		}
+		
+		else if(this.firstC == null){
+			this.firstC = new CNode(c);
+			this.lastC = this.firstC;
+		}
+		
+		else if(offset == 0){
+			CNode tempNode = firstC;
+			this.firstC = new CNode(c);
+			CNode currNode = firstC;
+			currNode.next = tempNode;
+		}
+		
+		else{
+			CNode tempNode;
+			int i = 0;
+			CNode currNode = firstC;
+			while(true){
+				if((offset-1)==i){
+					tempNode = currNode.next;
+					break;
+				}
+				currNode = currNode.next;
+				i++;
+			}
+			currNode.next = tempNode;
+		}
+		length++;
 		return this;
 	}
 
@@ -348,6 +485,66 @@ public class MyStringBuilder
 	// invalid, do nothing.
 	public MyStringBuilder insert(int offset, char [] c)
 	{
+		if(offset<0||offset>length){
+			return this;
+		}
+		
+		else if(offset == length){
+			append(c);
+		}
+		
+		else if(this.firstC == null){
+			this.firstC = new CNode(c[0]);
+			this.lastC = this.firstC;
+			CNode currNode = lastC;
+
+			for (int i = 1; i < c.length; i++)
+			{
+				CNode newNode = new CNode(c[i]);
+				currNode.next = newNode;
+				currNode = newNode;
+				length++;
+			}
+			lastC = currNode;
+		}
+		
+		else if(offset == 0){
+			CNode tempNode = firstC;
+			this.firstC = new CNode(c[0]);
+			CNode currNode = firstC;
+			
+			for (int j = 1; j < c.length; j++)
+			{
+				CNode newNode = new CNode(c[j]);
+				currNode.next = newNode;
+				currNode = newNode;
+				length++;
+			}
+			currNode.next = tempNode;
+		}
+		
+		else{
+			CNode tempNode;
+			int i = 0;
+			CNode currNode = firstC;
+			while(true){
+				if((offset-1)==i){
+					tempNode = currNode.next;
+					break;
+				}
+				currNode = currNode.next;
+				i++;
+			}
+			
+			for (int j = 0; j < c.length; j++)
+			{
+				CNode newNode = new CNode(c[j]);
+				currNode.next = newNode;
+				currNode = newNode;
+				length++;
+			}
+			currNode.next = tempNode;
+		}
 		return this;
 	}
 
@@ -366,6 +563,64 @@ public class MyStringBuilder
 	// end of the MyStringBuilder, then insert.
 	public MyStringBuilder replace(int start, int end, String str)
 	{
+		if(start<0||start>length){
+			return this;
+		}
+		else if(end<0){
+			throw new IndexOutOfBoundsException();						///////UPDATE LENGTH
+		}
+		else if(start>=end){
+			return this;
+		}
+		else{
+			int i = 0;
+			CNode currNode1 = firstC;
+			CNode front = firstC;
+			while(true){
+				if((start)==i){
+					break;
+				}
+				front = currNode1;
+				currNode1 = currNode1.next;
+				i++;
+			}
+			CNode currNode2 = currNode1;
+			CNode back = currNode1;
+			
+			CNode tempNode = new CNode(str.charAt(0));
+			CNode currNode = tempNode;
+			for (int j = 1; j < str.length(); j++)
+			{
+				CNode newNode = new CNode(str.charAt(j));
+				currNode.next = newNode;
+				currNode = newNode;
+			}			
+			
+			while(true){
+				if(end==i||currNode2.next==null){
+					break;
+				}
+				currNode2 = currNode2.next;
+				back = currNode2;
+				i++;
+			}
+			
+			if(end > length-1){
+				lastC = currNode;
+				lastC.next = null;
+			}
+			else{
+				currNode.next = back;
+			}
+
+			if(start == 0){
+				firstC = tempNode;
+			}
+			else{
+				front.next = tempNode;
+			}
+		}
+		length = getLength();
 		return this;
 	}
 
@@ -383,17 +638,37 @@ public class MyStringBuilder
 			return ("");
 		}
 		else{
-			String built = "";
+			int i = 0;
+			char[] build = new char[length];
+			CNode currNode = firstC;
+			while(true){
+				if(i==length||currNode==null){
+					break;
+				}
+				build[i] = currNode.data;
+				currNode = currNode.next;
+				i++;
+			}
+			return new String(build);
+		}
+	}
+	
+	public int getLength()
+	{
+		if (firstC == null) {					 			  
+			return 0;
+		}
+		else{
 			int i = 0;
 			CNode currNode = firstC;
 			while(true){
-				built = built + currNode.data;
+				i++;
 				if(currNode.next == null){
 					break;
 				}
 				currNode = currNode.next;
 			}
-			return built;
+			return i;
 		}
 	}
 
