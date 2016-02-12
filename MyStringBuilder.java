@@ -333,36 +333,35 @@ public class MyStringBuilder
 	// what you need to do for this method before implementing it.
 	public int indexOf(String str)
 	{
-		/*
-		if(index<0||index>length){
-			throw new IndexOutOfBoundsException();
-		}
-		else{
-			int i = 0;
-			CNode currNode = firstC;
-			while(true){
-				if((index)==i){
-					break;
+		int j = 0;
+		CNode currNode = firstC;
+		boolean test = false;
+		while(true){
+			CNode temp = currNode;
+			
+			if(length==j || currNode==null){
+				break;
+			}
+			
+			if(temp.data == str.charAt(0)){
+				for(int i = 1; i<str.length();i++){
+					temp = temp.next;
+					if(temp == null || temp.data != str.charAt(i)){
+						test = false;
+						break;
+					}
+					else{
+						test = true;
+					}
 				}
-				currNode = currNode.next;
-				i++;
 			}
-			return currNode.data;
-			firstC = new CNode(s[0]);
-			length = 1;
-			CNode currNode = firstC;
-			// Create remaining nodes, copying from String.  Note
-			// how each new node is simply added to the end of the
-			// previous one.  Trace this to see what is going on.
-			for (int i = 1; i < s.length; i++)
-			{
-				CNode newNode = new CNode(s[i]);
-				currNode.next = newNode;
-				currNode = newNode;
-				length++;
+			if(test){
+				return j;
 			}
+			currNode = currNode.next;
+			j++;
 		}
-		*/
+		
 		return -1;
 	}
 
@@ -628,7 +627,27 @@ public class MyStringBuilder
 	// index "end" - 1 within the current MyStringBuilder
 	public String substring(int start, int end)
 	{
-		return "";
+		if (firstC == null) {					 			  
+			return ("");
+		}
+		else{
+			int i = 0;
+			char[] build = new char[length];
+			CNode currNode = firstC;
+			while(true){
+				if(i==length||currNode==null){
+					break;
+				}
+				build[i] = currNode.data;
+				currNode = currNode.next;
+				i++;
+			}
+			char [] sub = new char[end-start];
+			for(int j = 0; j<sub.length;j++){
+				sub[j] = build[start+j];
+			}
+			return new String(sub);
+		}
 	}
 
 	// Return the entire contents of the current MyStringBuilder as a String
@@ -653,7 +672,7 @@ public class MyStringBuilder
 		}
 	}
 	
-	public int getLength()
+	private int getLength()
 	{
 		if (firstC == null) {					 			  
 			return 0;
