@@ -102,17 +102,29 @@ public class MyStringBuilder
 		{					 			  // or null reference
 			return this;
 		}
-		/*
 		else{
-			boolean firstPt = false;
-			if(this.firstC == null){
-				this.firstC = (CNode)b;
-				return this;
+			
+			CNode currNode = new CNode(b.firstC.data);
+			CNode temp = b.firstC.next;
+			CNode front = currNode;
+			length++;
+			
+			while(true){
+				CNode newNode = new CNode(temp.data);
+				currNode.next = newNode;
+				currNode = newNode;
+				
+				if(temp.next == null){
+					break;
+				}
+				temp = temp.next;
+				length++;
 			}
-			lastC.next = (CNode)b;
+			lastC.next = front;
+			lastC = currNode;
+			length++;
+			return this;
 		}
-		*/
-		return this.append(b.toString());
 	}
 
 
@@ -148,6 +160,7 @@ public class MyStringBuilder
 			}
 			lastC = currNode;
 		}
+		length = getLength();
 		return this;
 	}
 
@@ -361,7 +374,6 @@ public class MyStringBuilder
 			currNode = currNode.next;
 			j++;
 		}
-		
 		return -1;
 	}
 
