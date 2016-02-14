@@ -50,9 +50,9 @@ public class MyStringBuilder
 				CNode newNode = new CNode(s.charAt(i));
 				currNode.next = newNode;
 				currNode = newNode;
-				length++;
 			}
 			lastC = currNode;
+			length = s.length();
 		}
 	}
 
@@ -79,9 +79,9 @@ public class MyStringBuilder
 				CNode newNode = new CNode(s[i]);
 				currNode.next = newNode;
 				currNode = newNode;
-				length++;
 			}
 			lastC = currNode;
+			length = s.length;
 		}
 	}
 
@@ -107,7 +107,6 @@ public class MyStringBuilder
 			CNode currNode = new CNode(b.firstC.data);
 			CNode temp = b.firstC.next;
 			CNode front = currNode;
-			length++;
 			
 			while(true){
 				CNode newNode = new CNode(temp.data);
@@ -118,11 +117,10 @@ public class MyStringBuilder
 					break;
 				}
 				temp = temp.next;
-				length++;
 			}
 			lastC.next = front;
 			lastC = currNode;
-			length++;
+			length+=b.length;
 			return this;
 		}
 	}
@@ -156,11 +154,10 @@ public class MyStringBuilder
 				CNode newNode = new CNode(s.charAt(i));
 				currNode.next = newNode;
 				currNode = newNode;
-				length++;
 			}
 			lastC = currNode;
+			length+=s.length();
 		}
-		length = getLength();
 		return this;
 	}
 
@@ -190,9 +187,9 @@ public class MyStringBuilder
 				CNode newNode = new CNode(c[i]);
 				currNode.next = newNode;
 				currNode = newNode;
-				length++;
 			}
 			lastC = currNode;
+			length+=c.length;
 		}
 		return this;
 	}
@@ -255,9 +252,15 @@ public class MyStringBuilder
 			return this;
 		}
 		else if(end<0){
-			throw new IndexOutOfBoundsException();						///////UPDATE LENGTH
+			throw new IndexOutOfBoundsException();						
 		}
 		else if(start>=end){
+			return this;
+		}
+		else if(start == 0 && end>= length){
+			firstC=null;
+			lastC = null;
+			length = 0;
 			return this;
 		}
 		else{
@@ -275,11 +278,6 @@ public class MyStringBuilder
 			CNode currNode2 = currNode1;
 			CNode back = currNode1;
 			
-			if(end > length){
-				lastC = currNode1;
-				lastC.next = null;
-			}
-			
 			while(true){
 				if((end)==i||currNode2.next==null){
 					break;
@@ -291,8 +289,14 @@ public class MyStringBuilder
 			front.next = back;
 			if(start == 0){
 				firstC = currNode2;
+				length-=end;
 			}
-			length = getLength();
+			
+			if(end > length){
+				lastC = currNode1;
+				lastC.next = null;
+				length=start;
+			}
 			return this;
 		}
 	}
@@ -382,7 +386,7 @@ public class MyStringBuilder
 	// length, this is the same as append.  If "offset" is invalid
 	// do nothing.
 	public MyStringBuilder insert(int offset, String str)
-	{
+	{																//FIX COUNTING
 		if(offset<0||offset>length){
 			return this;
 		}
@@ -401,7 +405,6 @@ public class MyStringBuilder
 				CNode newNode = new CNode(str.charAt(i));
 				currNode.next = newNode;
 				currNode = newNode;
-				length++;
 			}
 			lastC = currNode;
 		}
@@ -416,7 +419,6 @@ public class MyStringBuilder
 				CNode newNode = new CNode(str.charAt(j));
 				currNode.next = newNode;
 				currNode = newNode;
-				length++;
 			}
 			currNode.next = tempNode;
 		}
@@ -439,11 +441,10 @@ public class MyStringBuilder
 				CNode newNode = new CNode(str.charAt(j));
 				currNode.next = newNode;
 				currNode = newNode;
-				length++;
 			}
 			currNode.next = tempNode;
 		}
-		length = getLength();		//Need to figure out why my count isn't right so i can take this out***************************************
+		length+=str.length();
 		return this;
 	}
 
@@ -458,7 +459,17 @@ public class MyStringBuilder
 		}
 		
 		else if(offset == length){
-			append(c);
+			if(this.firstC == null){
+				this.firstC = new CNode(c);
+				this.lastC = this.firstC;
+			}
+			
+			CNode currNode = lastC;
+			CNode newNode = new CNode(c);
+			currNode.next = newNode;
+			currNode = newNode;
+			length++;
+			lastC = currNode;
 		}
 		
 		else if(this.firstC == null){
@@ -474,18 +485,18 @@ public class MyStringBuilder
 		}
 		
 		else{
-			CNode tempNode;
+			CNode tempNode = new CNode(c);
 			int i = 0;
 			CNode currNode = firstC;
 			while(true){
 				if((offset-1)==i){
-					tempNode = currNode.next;
+					tempNode.next = currNode.next;
+					currNode.next = tempNode;
 					break;
 				}
 				currNode = currNode.next;
 				i++;
 			}
-			currNode.next = tempNode;
 		}
 		length++;
 		return this;
@@ -514,7 +525,6 @@ public class MyStringBuilder
 				CNode newNode = new CNode(c[i]);
 				currNode.next = newNode;
 				currNode = newNode;
-				length++;
 			}
 			lastC = currNode;
 		}
@@ -529,7 +539,6 @@ public class MyStringBuilder
 				CNode newNode = new CNode(c[j]);
 				currNode.next = newNode;
 				currNode = newNode;
-				length++;
 			}
 			currNode.next = tempNode;
 		}
@@ -552,10 +561,10 @@ public class MyStringBuilder
 				CNode newNode = new CNode(c[j]);
 				currNode.next = newNode;
 				currNode = newNode;
-				length++;
 			}
 			currNode.next = tempNode;
 		}
+		length+=c.length;
 		return this;
 	}
 
@@ -581,6 +590,23 @@ public class MyStringBuilder
 			throw new IndexOutOfBoundsException();						///////UPDATE LENGTH
 		}
 		else if(start>=end){
+			return this;
+		}
+		else if(start == 0 && end>= length){
+			firstC=null;
+			lastC = null;
+			length = 0;
+			firstC = new CNode(str.charAt(0));
+			length = 1;
+			CNode currNode = firstC;
+			for (int i = 1; i < str.length(); i++)
+			{
+				CNode newNode = new CNode(str.charAt(i));
+				currNode.next = newNode;
+				currNode = newNode;
+			}
+			lastC = currNode;
+			length = str.length();
 			return this;
 		}
 		else{
@@ -630,8 +656,9 @@ public class MyStringBuilder
 			else{
 				front.next = tempNode;
 			}
+			length+=str.length();
+			length-=(start-end);
 		}
-		length = getLength();
 		return this;
 	}
 
@@ -684,25 +711,6 @@ public class MyStringBuilder
 		}
 	}
 	
-	private int getLength()
-	{
-		if (firstC == null) {					 			  
-			return 0;
-		}
-		else{
-			int i = 0;
-			CNode currNode = firstC;
-			while(true){
-				i++;
-				if(currNode.next == null){
-					break;
-				}
-				currNode = currNode.next;
-			}
-			return i;
-		}
-	}
-
 	// You must use this inner class exactly as specified below.  Note that
 	// since it is an inner class, the MyStringBuilder class MAY access the
 	// data and next fields directly.
