@@ -291,11 +291,13 @@ public class MyStringBuilder
 				firstC = currNode2;
 				length-=end;
 			}
-			
 			if(end > length){
 				lastC = currNode1;
 				lastC.next = null;
 				length=start;
+			}
+			if(start>0&&end<length){
+				length = length-end+start;
 			}
 			return this;
 		}
@@ -454,8 +456,26 @@ public class MyStringBuilder
 	// do nothing.
 	public MyStringBuilder insert(int offset, char c)
 	{
-		if(offset<0||offset>length){
+		if(offset>0&&offset<length){
+			CNode tempNode = new CNode(c);
+			int i = 0;
+			CNode currNode = firstC;
+			while(true){
+				if((offset-1)==i){
+					tempNode.next = currNode.next;
+					currNode.next = tempNode;
+					break;
+				}
+				currNode = currNode.next;
+				i++;
+			}
+			length++;
 			return this;
+		}
+		else if(offset == 0){
+			CNode tempNode = firstC;
+			this.firstC = new CNode(c);
+			firstC.next = tempNode;
 		}
 		
 		else if(offset == length){
@@ -471,32 +491,8 @@ public class MyStringBuilder
 			length++;
 			lastC = currNode;
 		}
-		
-		else if(this.firstC == null){
-			this.firstC = new CNode(c);
-			this.lastC = this.firstC;
-		}
-		
-		else if(offset == 0){
-			CNode tempNode = firstC;
-			this.firstC = new CNode(c);
-			CNode currNode = firstC;
-			currNode.next = tempNode;
-		}
-		
-		else{
-			CNode tempNode = new CNode(c);
-			int i = 0;
-			CNode currNode = firstC;
-			while(true){
-				if((offset-1)==i){
-					tempNode.next = currNode.next;
-					currNode.next = tempNode;
-					break;
-				}
-				currNode = currNode.next;
-				i++;
-			}
+		else if ((offset<0||offset>length)){
+			return this;
 		}
 		length++;
 		return this;
