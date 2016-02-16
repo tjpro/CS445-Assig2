@@ -251,9 +251,6 @@ public class MyStringBuilder
 		if(start<0||start>length){
 			return this;
 		}
-		else if(end<0){
-			throw new IndexOutOfBoundsException();						
-		}
 		else if(start>=end){
 			return this;
 		}
@@ -314,6 +311,7 @@ public class MyStringBuilder
 		}
 		else if(index == 0){
 			firstC = firstC.next;
+			length--;
 			return this;
 		}
 		else if(index == length-1){
@@ -582,9 +580,6 @@ public class MyStringBuilder
 		if(start<0||start>length){
 			return this;
 		}
-		else if(end<0){
-			throw new IndexOutOfBoundsException();						///////UPDATE LENGTH
-		}
 		else if(start>=end){
 			return this;
 		}
@@ -638,9 +633,14 @@ public class MyStringBuilder
 				i++;
 			}
 			
-			if(end > length-1){
+			if(start > 0 && end < length-1){
+				length= length - (end - start) + str.length();
+			}
+			
+			if(end >= length-1){
 				lastC = currNode;
 				lastC.next = null;
+				length = start + str.length();
 			}
 			else{
 				currNode.next = back;
@@ -648,12 +648,11 @@ public class MyStringBuilder
 
 			if(start == 0){
 				firstC = tempNode;
+				length = length - end - 1 + str.length();
 			}
 			else{
 				front.next = tempNode;
 			}
-			length+=str.length();
-			length-=(start-end);
 		}
 		return this;
 	}
@@ -696,7 +695,7 @@ public class MyStringBuilder
 			char[] build = new char[length];
 			CNode currNode = firstC;
 			while(true){
-				if(i==length||currNode==null){
+				if(i==length||currNode==null){ 
 					break;
 				}
 				build[i] = currNode.data;

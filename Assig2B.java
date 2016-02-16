@@ -54,6 +54,8 @@ public class Assig2B
 				System.out.println("Average Time per Operation: " + ((end-start)/charCount));
 				
 			}
+			
+			
 			else if(run==1){				//MyStringBuilder run
 				System.out.println("\nTesting MyStringbuilder");
 				
@@ -96,6 +98,8 @@ public class Assig2B
 				System.out.println("Average Time per Operation: " +((end-start)/charCount));
 				
 			}
+			
+			
 			else{							//String run
 				System.out.println("\nTesting String");
 				
