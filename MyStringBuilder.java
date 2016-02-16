@@ -1,3 +1,8 @@
+//Tyler Protivnak
+//CS445 - Assig2
+//MyStringBuilder.java file
+
+
 // CS 0445 Spring 2016
 // Read this class and its comments very carefully to make sure you implement
 // the class properly.  Note the items that are required and that cannot be
@@ -86,7 +91,7 @@ public class MyStringBuilder
 	}
 
 	// Create a new empty MyStringBuilder
-	public MyStringBuilder()
+	public MyStringBuilder()//Creates empty object
 	{
 		firstC = null;
 		lastC = null;
@@ -104,7 +109,7 @@ public class MyStringBuilder
 		}
 		else{
 			
-			CNode currNode = new CNode(b.firstC.data);
+			CNode currNode = new CNode(b.firstC.data);	//Go through all the nodes for the MyStringBuilder b to add to end
 			CNode temp = b.firstC.next;
 			CNode front = currNode;
 			
@@ -136,14 +141,14 @@ public class MyStringBuilder
 		}
 		else
 		{
-			boolean firstPt = false;
+			boolean firstPt = false;//Check if object is empty
 			if(this.firstC == null){
 				this.firstC = new CNode(s.charAt(0));
 				this.lastC = this.firstC;
 				firstPt = true;
 			}
 			
-			CNode currNode = lastC;
+			CNode currNode = lastC;//If this is the first point, start index at 1
 			int r = 0;
 			if(firstPt){
 				r++;
@@ -171,7 +176,7 @@ public class MyStringBuilder
 		}
 		else
 		{
-			boolean firstPt = false;
+			boolean firstPt = false;//Same as above, checks if this will be the first node.
 			if(this.firstC == null){
 				this.firstC = new CNode(c[0]);
 				this.lastC = this.firstC;
@@ -199,7 +204,7 @@ public class MyStringBuilder
 	public MyStringBuilder append(char c)
 	{
 
-		if (c == '\u0000'){					 			  
+		if (c == '\u0000'){//checks if char is 	empty				 			  
 			return this;
 		}
 		else
@@ -224,7 +229,7 @@ public class MyStringBuilder
 	public char charAt(int index)
 	{
 		if(index<0||index>length){
-			throw new IndexOutOfBoundsException();
+			throw new IndexOutOfBoundsException();//incase index isn't valid
 		}
 		else{
 			int i = 0;
@@ -248,23 +253,28 @@ public class MyStringBuilder
 	// special cases!
 	public MyStringBuilder delete(int start, int end)
 	{
-		if(start<0||start>length){
+		if(start<0||start>length){//Special case 
 			return this;
 		}
-		else if(start>=end){
+		else if(start == 0 && end == 1){//just delete the first char
+			firstC = firstC.next;
+			length--;
 			return this;
 		}
-		else if(start == 0 && end>= length){
+		else if(start>=end){ // special case
+			return this;
+		}
+		else if(start == 0 && end>= length){//delete the whole thing
 			firstC=null;
 			lastC = null;
 			length = 0;
 			return this;
 		}
-		else{
+		else{//normal case
 			int i = 0;
 			CNode currNode1 = firstC;
 			CNode front = firstC;
-			while(true){
+			while(true){//find front
 				if((start)==i){
 					break;
 				}
@@ -276,7 +286,7 @@ public class MyStringBuilder
 			CNode back = currNode1;
 			
 			while(true){
-				if((end)==i||currNode2.next==null){
+				if((end)==i||currNode2.next==null){//find back
 					break;
 				}
 				currNode2 = currNode2.next;
@@ -306,15 +316,15 @@ public class MyStringBuilder
 	// Be careful for special cases!
 	public MyStringBuilder deleteCharAt(int index)
 	{
-		if(index<0||index>length){
+		if(index<0||index>length){//special case
 			return this;
 		}
-		else if(index == 0){
+		else if(index == 0){//front char
 			firstC = firstC.next;
 			length--;
 			return this;
 		}
-		else if(index == length-1){
+		else if(index == length-1){//just delete end
 			int i = 0;
 			CNode currNode = firstC;
 			while(true){
@@ -327,7 +337,7 @@ public class MyStringBuilder
 			}
 			length--;
 		}
-		else{
+		else{//normal case
 			int i = 0;
 			CNode currNode = firstC;
 			while(true){
@@ -363,7 +373,7 @@ public class MyStringBuilder
 			if(temp.data == str.charAt(0)){
 				for(int i = 1; i<str.length();i++){
 					temp = temp.next;
-					if(temp == null || temp.data != str.charAt(i)){
+					if(temp == null || temp.data != str.charAt(i)){//basically loops through all string if first letter matches
 						test = false;
 						break;
 					}
@@ -386,16 +396,36 @@ public class MyStringBuilder
 	// length, this is the same as append.  If "offset" is invalid
 	// do nothing.
 	public MyStringBuilder insert(int offset, String str)
-	{																//FIX COUNTING
+	{																
 		if(offset<0||offset>length){
 			return this;
 		}
 		
-		else if(offset == length){
-			append(str);
+		else if(offset == length){//just the append case
+			//append(str);
+			boolean firstPt = false;//Check if object is empty
+			if(this.firstC == null){
+				this.firstC = new CNode(str.charAt(0));
+				this.lastC = this.firstC;
+				firstPt = true;
+			}
+			
+			CNode currNode = lastC;//If this is the first point, start index at 1
+			int r = 0;
+			if(firstPt){
+				r++;
+			}
+			
+			for (int i = r; i < str.length(); i++)
+			{
+				CNode newNode = new CNode(str.charAt(i));
+				currNode.next = newNode;
+				currNode = newNode;
+			}
+			lastC = currNode;
 		}
 		
-		else if(this.firstC == null){
+		else if(this.firstC == null){//check special case
 			this.firstC = new CNode(str.charAt(0));
 			this.lastC = this.firstC;
 			CNode currNode = lastC;
@@ -409,7 +439,7 @@ public class MyStringBuilder
 			lastC = currNode;
 		}
 		
-		else if(offset == 0){
+		else if(offset == 0){//put at front
 			CNode tempNode = firstC;
 			this.firstC = new CNode(str.charAt(0));
 			CNode currNode = firstC;
@@ -423,7 +453,7 @@ public class MyStringBuilder
 			currNode.next = tempNode;
 		}
 		
-		else{
+		else{//normal case
 			CNode tempNode;
 			int i = 0;
 			CNode currNode = firstC;
@@ -454,7 +484,7 @@ public class MyStringBuilder
 	// do nothing.
 	public MyStringBuilder insert(int offset, char c)
 	{
-		if(offset>0&&offset<length){
+		if(offset>0&&offset<length){//normal case
 			CNode tempNode = new CNode(c);
 			int i = 0;
 			CNode currNode = firstC;
@@ -470,6 +500,7 @@ public class MyStringBuilder
 			length++;
 			return this;
 		}
+		
 		else if(offset == 0){
 			CNode tempNode = firstC;
 			this.firstC = new CNode(c);
@@ -506,10 +537,27 @@ public class MyStringBuilder
 		}
 		
 		else if(offset == length){
-			append(c);
+			boolean firstPt = false;//Same as above, checks if this will be the first node.
+			if(this.firstC == null){
+				this.firstC = new CNode(c[0]);
+				this.lastC = this.firstC;
+				firstPt = true;
+			}
+			CNode currNode = lastC;
+			int r = 0;
+			if(firstPt){
+				r++;
+			}
+			
+			for (int i = r; i < c.length; i++){
+				CNode newNode = new CNode(c[i]);
+				currNode.next = newNode;
+				currNode = newNode;
+			}
+			lastC = currNode;
 		}
 		
-		else if(this.firstC == null){
+		else if(this.firstC == null){//special case
 			this.firstC = new CNode(c[0]);
 			this.lastC = this.firstC;
 			CNode currNode = lastC;
@@ -523,7 +571,7 @@ public class MyStringBuilder
 			lastC = currNode;
 		}
 		
-		else if(offset == 0){
+		else if(offset == 0){//front
 			CNode tempNode = firstC;
 			this.firstC = new CNode(c[0]);
 			CNode currNode = firstC;
@@ -537,7 +585,7 @@ public class MyStringBuilder
 			currNode.next = tempNode;
 		}
 		
-		else{
+		else{// normal case
 			CNode tempNode;
 			int i = 0;
 			CNode currNode = firstC;
@@ -565,7 +613,7 @@ public class MyStringBuilder
 	// Return the length of the current MyStringBuilder
 	public int length()
 	{
-		return length;
+		return length;//get length
 	}
 
 
@@ -577,10 +625,10 @@ public class MyStringBuilder
 	// end of the MyStringBuilder, then insert.
 	public MyStringBuilder replace(int start, int end, String str)
 	{
-		if(start<0||start>length){
+		if(start<0||start>length){//special case
 			return this;
 		}
-		else if(start>=end){
+		else if(start>=end){//special case
 			return this;
 		}
 		else if(start == 0 && end>= length){
@@ -600,11 +648,11 @@ public class MyStringBuilder
 			length = str.length();
 			return this;
 		}
-		else{
+		else{//normal case
 			int i = 0;
 			CNode currNode1 = firstC;
 			CNode front = firstC;
-			while(true){
+			while(true){//find front
 				if((start)==i){
 					break;
 				}
@@ -617,14 +665,14 @@ public class MyStringBuilder
 			
 			CNode tempNode = new CNode(str.charAt(0));
 			CNode currNode = tempNode;
-			for (int j = 1; j < str.length(); j++)
+			for (int j = 1; j < str.length(); j++)//put string in
 			{
 				CNode newNode = new CNode(str.charAt(j));
 				currNode.next = newNode;
 				currNode = newNode;
 			}			
 			
-			while(true){
+			while(true){//find back
 				if(end==i||currNode2.next==null){
 					break;
 				}
@@ -648,7 +696,7 @@ public class MyStringBuilder
 
 			if(start == 0){
 				firstC = tempNode;
-				length = length - end - 1 + str.length();
+				length = length - end - 1 + str.length() + 1;
 			}
 			else{
 				front.next = tempNode;
@@ -661,10 +709,10 @@ public class MyStringBuilder
 	// index "end" - 1 within the current MyStringBuilder
 	public String substring(int start, int end)
 	{
-		if (firstC == null) {					 			  
+		if (firstC == null) {//special case					 			  
 			return ("");
 		}
-		else{
+		else{// normal case
 			int i = 0;
 			char[] build = new char[length];
 			CNode currNode = firstC;
@@ -687,10 +735,10 @@ public class MyStringBuilder
 	// Return the entire contents of the current MyStringBuilder as a String
 	public String toString()
 	{
-		if (firstC == null) {					 			  
+		if (firstC == null) {//special case					 			  
 			return ("");
 		}
-		else{
+		else{//uses char array as instructed
 			int i = 0;
 			char[] build = new char[length];
 			CNode currNode = firstC;

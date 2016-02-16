@@ -11,7 +11,6 @@ public class Assig2B
 {
 	public static void main(String [] args) throws IOException
 	{
-		//String inFile = args[0];
 		for(int run = 0; run < 3; run++){
 			if(run==0){						//StringBuilder run
 				System.out.println("Testing Stringbuilder");
@@ -32,7 +31,7 @@ public class Assig2B
 				end = System.nanoTime();
 				br.close();
 				System.out.println("Elapsed Time: "+(end-start));
-				System.out.println("Average Time per Operation: " +((end-start)/charCount));
+				System.out.println("Average Time per Append Operation: " +((end-start)/charCount));
 				
 				start = System.nanoTime();
 				while (s.length()!=0) {
@@ -40,7 +39,7 @@ public class Assig2B
 				}
 				end = System.nanoTime();
 				System.out.println("Elapsed Time: "+(end-start));
-				System.out.println("Average Time per Operation: " +((end-start)/charCount));
+				System.out.println("Average Time per Delete Operation: " +((end-start)/charCount));
 				
 				BufferedReader br2 = new BufferedReader(new FileReader(args[0]));
 				start = System.nanoTime();
@@ -51,7 +50,7 @@ public class Assig2B
 				br2.close();
 				
 				System.out.println("Elapsed Time: "+(end-start));
-				System.out.println("Average Time per Operation: " + ((end-start)/charCount));
+				System.out.println("Average Time per Insert Operation: " + ((end-start)/charCount));
 				
 			}
 			
@@ -76,7 +75,7 @@ public class Assig2B
 				br.close();
 				
 				System.out.println("Elapsed Time: "+(end-start));
-				System.out.println("Average Time per Operation: " +((end-start)/charCount));
+				System.out.println("Average Time per Append Operation: " +((end-start)/charCount));
 				
 				start = System.nanoTime();
 				while (s.length()!=0) {
@@ -84,7 +83,7 @@ public class Assig2B
 				}
 				end = System.nanoTime();
 				System.out.println("Elapsed Time: "+(end-start));
-				System.out.println("Average Time per Operation: " +((end-start)/charCount));
+				System.out.println("Average Time per Delete Operation: " +((end-start)/charCount));
 				
 				BufferedReader br2 = new BufferedReader(new FileReader(args[0]));
 				start = System.nanoTime();
@@ -95,7 +94,7 @@ public class Assig2B
 				br2.close();
 				
 				System.out.println("Elapsed Time: "+(end-start));
-				System.out.println("Average Time per Operation: " +((end-start)/charCount));
+				System.out.println("Average Time per Insert Operation: " +((end-start)/charCount));
 				
 			}
 			
@@ -119,7 +118,7 @@ public class Assig2B
 				end = System.nanoTime();
 				br.close();
 				System.out.println("Elapsed Time: "+(end-start));
-				System.out.println("Average Time per Operation: " +((end-start)/charCount));
+				System.out.println("Average Time per pseudo-Append Operation: " +((end-start)/charCount));
 				
 				start = System.nanoTime();
 				while (s.length()!=0) {
@@ -127,7 +126,7 @@ public class Assig2B
 				}
 				end = System.nanoTime();
 				System.out.println("Elapsed Time: "+(end-start));
-				System.out.println("Average Time per Operation: " +((end-start)/charCount));
+				System.out.println("Average Time per pseudo-Delete Operation: " +((end-start)/charCount));
 				
 				BufferedReader br2 = new BufferedReader(new FileReader(args[0]));
 				start = System.nanoTime();
@@ -137,7 +136,7 @@ public class Assig2B
 				end = System.nanoTime();
 				br2.close();
 				System.out.println("Elapsed Time: "+(end-start));
-				System.out.println("Average Time per Operation: " +((end-start)/charCount));
+				System.out.println("Average Time per pseudo-Insert Operation: " +((end-start)/charCount));
 				
 			}
 		}
